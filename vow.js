@@ -1,6 +1,6 @@
 // vow.js
 // Douglas Crockford
-// 2012-10-12
+// 2012-10-22
 
 // Public Domain
 
@@ -30,13 +30,13 @@ var VOW = (function () {
 
 
     function enqueue(
-        queue,      // An array of resolve functions
+        queue,      // An array of resolve functions (keepers or breakers)
         func,       // A function that was registered with the .when method
         resolver,   // A resolve function to append to the queue
         breaker     // A break resolve function to be used if func fails
     ) {
 
-// enqueue is a helper function used by .when. It will append a resovler to
+// enqueue is a helper function used by .when. It will append a function to
 // either the keepers queue or the breakers queue.
 
         queue[queue.length] = typeof func !== 'function'
@@ -88,7 +88,7 @@ var VOW = (function () {
         make: function make() {
 
 // The make function makes new vows. A vow contains a promise object and the
-// two resolution functions: break and keep that determine the fate of the
+// two resolution functions (break and keep) that determine the fate of the
 // promise.
 
             var breakers = [],          // .when's broken queue
@@ -135,16 +135,16 @@ var VOW = (function () {
 
 // The .when method is the promise monad's bind. The .when method can take two
 // optional functions. One of those functions may be called, depending on the
-// promise's resolution.
+// promise's resolution. Both could be called if the the kept function throws.
 
                     when: function (kept, broken) {
 
-// Make a new vow. The promise will be the return value of .when.
+// Make a new vow. Return the new promise.
 
                         var vow = make();
                         switch (status) {
 
-// If the promise is still pending, then enqueue both kept and broken.
+// If this promise is still pending, then enqueue both kept and broken.
 
                         case 'pending':
                             enqueue(keepers,  kept,   vow.keep,  vow.break);
@@ -200,8 +200,8 @@ var VOW = (function () {
         first: function first(array) {
 
 // The first function takes an array of promises and returns a promise to
-// deliver the first observed kept promise, or a broken promise if none of
-// the promises are kept.
+// deliver the first observed kept promise, or a broken promise if all of
+// the promises are broken.
 
             var found = false, remaining = array.length, vow = VOW.make();
 
@@ -231,7 +231,7 @@ var VOW = (function () {
 
 // The any function takes an array of promises and returns a promise that
 // will deliver a possibly sparse array of results of any kept promises.
-// The result will contain an undefined cell for each broken promise.
+// The result will contain an undefined element for each broken promise.
 
             var remaining = array.length, results = [], vow = VOW.make();
 
