@@ -115,7 +115,9 @@ var VOW = (function () {
             return {
                 'break': function (value) {
 
-// The break method breaks the promise.
+// The break method breaks the promise. Programs targeted for obsolete ES3
+// engines (which at this date is only IE<9) must write vow.break() as
+// vow['break']().
 
                     herald('broken', value, breakers);
                 },
