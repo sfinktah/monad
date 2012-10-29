@@ -1,10 +1,8 @@
 // vow.js
 // Douglas Crockford
-// 2012-10-22
+// 2012-10-29
 
 // Public Domain
-
-/*jslint es5: true */
 
 /*global setTimeout, setImmediate */
 
@@ -115,7 +113,7 @@ var VOW = (function () {
 // Construct and return the vow object.
 
             return {
-                break: function (value) {
+                'break': function (value) {
 
 // The break method breaks the promise.
 
@@ -147,15 +145,15 @@ var VOW = (function () {
 // If this promise is still pending, then enqueue both kept and broken.
 
                         case 'pending':
-                            enqueue(keepers,  kept,   vow.keep,  vow.break);
-                            enqueue(breakers, broken, vow.break, vow.break);
+                            enqueue(keepers,  kept,   vow.keep,     vow['break']);
+                            enqueue(breakers, broken, vow['break'], vow['break']);
                             break;
 
 // If the promise has already been kept, then enqueue only the kept function,
 // and enlighten it.
 
                         case 'kept':
-                            enqueue(keepers, kept, vow.keep, vow.break);
+                            enqueue(keepers, kept, vow.keep, vow['break']);
                             enlighten(keepers, fate);
                             break;
 
@@ -163,7 +161,7 @@ var VOW = (function () {
 // function, and enlighten it.
 
                         case 'broken':
-                            enqueue(breakers, broken, vow.break, vow.break);
+                            enqueue(breakers, broken, vow['break'], vow['break']);
                             enlighten(breakers, fate);
                             break;
                         }
@@ -180,7 +178,7 @@ var VOW = (function () {
             var remaining = array.length, results = [], vow = VOW.make();
 
             if (!remaining) {
-                vow.break(array);
+                vow['break'](array);
             } else {
                 array.forEach(function (promise, i) {
                     promise.when(function (value) {
@@ -191,7 +189,7 @@ var VOW = (function () {
                         }
                     }, function (reason) {
                         remaining = NaN;
-                        vow.break(reason);
+                        vow['break'](reason);
                     });
                 });
             }
@@ -208,12 +206,12 @@ var VOW = (function () {
             function check() {
                 remaining -= 1;
                 if (remaining === 0 && !found) {
-                    vow.break();
+                    vow['break']();
                 }
             }
 
             if (remaining === 0) {
-                vow.break(array);
+                vow['break'](array);
             } else {
                 array.forEach(function (promise) {
                     promise.when(function (value) {
@@ -267,7 +265,7 @@ var VOW = (function () {
 // Returns a new broken promise/
 
             var vow = VOW.make();
-            vow.break(reason);
+            vow['break'](reason);
             return vow.promise;
         }
     };
