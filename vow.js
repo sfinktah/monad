@@ -1,6 +1,6 @@
 // vow.js
 // Douglas Crockford
-// 2012-10-29
+// 2013-01-26
 
 // Public Domain
 
@@ -163,7 +163,7 @@ var VOW = (function () {
 // function, and enlighten it.
 
                         case 'broken':
-                            enqueue(breakers, broken, vow['break'], vow['break']);
+                            enqueue(breakers, broken, vow.keep, vow['break']);
                             enlighten(breakers, fate);
                             break;
                         }
