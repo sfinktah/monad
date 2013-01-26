@@ -1,6 +1,6 @@
 // monad.js
 // Douglas Crockford
-// 2012-10-17
+// 2013-01-26
 
 // Public Domain
 
@@ -30,16 +30,18 @@
 //            monad.bind = function () {
 //                return monad;
 //            };
+//            return null;
 //        }
+//        return value;
 //    });
 //    var monad = maybe(null);
-//    monad.bind(alert);
+//    monad.bind(alert);    // Nothing happens.
 
 function MONAD(modifier) {
     'use strict';
 
 // Each unit constructor has a monad prototype. The prototype will contain an
-// is_monad property for classification, as well as all inherited methods.
+// is_monad property for classification, as well as all inheritable methods.
 
     var prototype = Object.create(null);
     prototype.is_monad = true;
@@ -74,7 +76,7 @@ function MONAD(modifier) {
 // and the value.
 
         if (typeof modifier === 'function') {
-            modifier(monad, value);
+            value = modifier(monad, value);
         }
 
 // Return the shiny new monad.
