@@ -4,19 +4,7 @@
 
 // Public Domain
 
-/*global setTimeout, setImmediate */
-
-
-// If this system does not have setImmediate, then simulate it with setTimeout.
-
-if (typeof setImmediate !== 'function') {
-    setImmediate = function setImmediate(func, param) {
-        'use strict';
-        return setTimeout(function () {
-            func(param);
-        }, 0);
-    };
-}
+/*global setImmediate */
 
 
 var VOW = (function () {
@@ -262,7 +250,7 @@ var VOW = (function () {
         },
         broken: function (reason) {
 
-// Returns a new broken promise/
+// Returns a new broken promise.
 
             var vow = VOW.make();
             vow['break'](reason);
@@ -270,3 +258,18 @@ var VOW = (function () {
         }
     };
 }());
+
+
+// If your system does not have setImmediate, then simulate it with setTimeout.
+
+// if (typeof setImmediate !== 'function') {
+//     setImmediate = function setImmediate(func, param) {
+//         'use strict';
+//         return setTimeout(function () {
+//             func(param);
+//         }, 0);
+//     };
+// }
+
+
+
