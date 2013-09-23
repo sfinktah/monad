@@ -1,6 +1,6 @@
 // vow.js
 // Douglas Crockford
-// 2013-01-28
+// 2013-09-20
 
 // Public Domain
 
@@ -64,7 +64,7 @@ var VOW = (function () {
 // If the result is a promise, then register our resolver with that promise.
 
                             if (result && result.is_promise === true) {
-                                result.when(vow.keep, vow['break']);
+                                result.when(vow.keep, vow.break);
 
 // But if it is not a promise, then use the result to resolve our promise.
 
@@ -75,7 +75,7 @@ var VOW = (function () {
 // But if func throws an exception, then break our promise.
 
                         } catch (e) {
-                            vow['break'](e);
+                            vow.break(e);
                         }
                     };
             }
@@ -101,9 +101,7 @@ var VOW = (function () {
             return {
                 'break': function (value) {
 
-// The break method breaks the promise. Programs targeted for obsolete ES3
-// engines (which at this date is only IE<9) must write vow.break() as
-// vow['break']().
+// The break method breaks the promise.
 
                     herald('broken', value, breakers);
                 },
@@ -166,7 +164,7 @@ var VOW = (function () {
             var remaining = array.length, results = [], vow = VOW.make();
 
             if (!remaining) {
-                vow['break'](array);
+                vow.break(array);
             } else {
                 array.forEach(function (promise, i) {
                     promise.when(function (value) {
@@ -177,7 +175,7 @@ var VOW = (function () {
                         }
                     }, function (reason) {
                         remaining = NaN;
-                        vow['break'](reason);
+                        vow.break(reason);
                     });
                 });
             }
@@ -194,12 +192,12 @@ var VOW = (function () {
             function check() {
                 remaining -= 1;
                 if (remaining === 0 && !found) {
-                    vow['break']();
+                    vow.break();
                 }
             }
 
             if (remaining === 0) {
-                vow['break'](array);
+                vow.break(array);
             } else {
                 array.forEach(function (promise) {
                     promise.when(function (value) {
@@ -253,7 +251,7 @@ var VOW = (function () {
 // Returns a new broken promise.
 
             var vow = VOW.make();
-            vow['break'](reason);
+            vow.break(reason);
             return vow.promise;
         }
     };
