@@ -1,6 +1,6 @@
 // monad.js
 // Douglas Crockford
-// 2015-02-24
+// 2015-05-02
 
 // Public Domain
 
@@ -110,8 +110,8 @@ function MONAD(modifier) {
         prototype[name] = function () {
             var result = this.bind(func, arguments);
             return result && result.is_monad === true 
-            ? result 
-            : unit(result);
+                ? result 
+                : unit(result);
         };
         return unit;
     };
