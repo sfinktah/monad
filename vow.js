@@ -1,6 +1,6 @@
 // vow.js
 // Douglas Crockford
-// 2013-09-20
+// 2015-02-25
 
 // Public Domain
 
@@ -46,38 +46,40 @@ var VOW = (function () {
 // enqueue is a helper function used by .when. It will append a function to
 // either the keepers queue or the breakers queue.
 
-                var queue = resolution === 'keep' ? keepers : breakers;
+                var queue = resolution === 'keep' 
+                ? keepers 
+                : breakers;
                 queue[queue.length] = typeof func !== 'function'
 
 // If func is not a function, push the resolver so that the value passes to
 // the next cascaded .when.
 
-                    ? vow[resolution]
+                ? vow[resolution]
 
 // If the func is a function, push a function that calls func with a value.
 // The result can be a promise, or not a promise, or an exception.
 
-                    : function (value) {
-                        try {
-                            var result = func(value);
+                : function (value) {
+                    try {
+                        var result = func(value);
 
 // If the result is a promise, then register our resolver with that promise.
 
-                            if (result && result.is_promise === true) {
-                                result.when(vow.keep, vow.break);
+                        if (result && result.is_promise === true) {
+                            result.when(vow.keep, vow.break);
 
 // But if it is not a promise, then use the result to resolve our promise.
 
-                            } else {
-                                vow.keep(result);
-                            }
+                        } else {
+                            vow.keep(result);
+                        }
 
 // But if func throws an exception, then break our promise.
 
-                        } catch (e) {
-                            vow.break(e);
-                        }
-                    };
+                    } catch (e) {
+                        vow.break(e);
+                    }
+                };
             }
 
             function herald(state, value, queue) {
@@ -131,7 +133,7 @@ var VOW = (function () {
 // If this promise is still pending, then enqueue both kept and broken.
 
                         case 'pending':
-                            enqueue('keep',  kept,   vow);
+                            enqueue('keep', kept, vow);
                             enqueue('break', broken, vow);
                             break;
 
@@ -256,18 +258,3 @@ var VOW = (function () {
         }
     };
 }());
-
-
-// If your system does not have setImmediate, then simulate it with setTimeout.
-
-// if (typeof setImmediate !== 'function') {
-//     setImmediate = function setImmediate(func, param) {
-//         'use strict';
-//         return setTimeout(function () {
-//             func(param);
-//         }, 0);
-//     };
-// }
-
-
-
