@@ -1,13 +1,14 @@
 // vow.js
 // Douglas Crockford
-// 2015-05-02
+// 2016-01-13
 
 // Public Domain
 
 /*global setImmediate */
 
 
-var VOW = (function () {
+var VOW;
+VOW = (function () {
     'use strict';
 
 // The VOW object contains a .make function that is used to make vows.
@@ -32,10 +33,10 @@ var VOW = (function () {
 // two resolution functions (break and keep) that determine the fate of the
 // promise.
 
-            var breakers = [],          // .when's broken queue
-                fate,                   // The promise's ultimate value
-                keepers = [],           // .when's kept queue
-                status = 'pending';     // 'broken', 'kept', or 'pending'
+            var breakers = [];          // .when's broken queue
+            var fate;                   // The promise's ultimate value
+            var keepers = [];           // .when's kept queue
+            var status = 'pending';     // 'broken'; 'kept'; or 'pending'
 
             function enqueue(
                 resolution, // 'keep' or 'break'
@@ -46,10 +47,10 @@ var VOW = (function () {
 // enqueue is a helper function used by .when. It will append a function to
 // either the keepers queue or the breakers queue.
 
-                var queue = resolution === 'keep' 
-                    ? keepers 
+                var queue = (resolution === 'keep')
+                    ? keepers
                     : breakers;
-                queue[queue.length] = typeof func !== 'function'
+                queue[queue.length] = (typeof func !== 'function')
 
 // If func is not a function, push the resolver so that the value passes to
 // the next cascaded .when.
@@ -163,7 +164,9 @@ var VOW = (function () {
 // The every function takes an array of promises and returns a promise that
 // will deliver an array of results only if every promise is kept.
 
-            var remaining = array.length, results = [], vow = VOW.make();
+            var remaining = array.length;
+            var results = [];
+            var vow = VOW.make();
 
             if (!remaining) {
                 vow.break(array);
@@ -189,7 +192,9 @@ var VOW = (function () {
 // deliver the first observed kept promise, or a broken promise if all of
 // the promises are broken.
 
-            var found = false, remaining = array.length, vow = VOW.make();
+            var found = false;
+            var remaining = array.length;
+            var vow = VOW.make();
 
             function check() {
                 remaining -= 1;
@@ -219,7 +224,9 @@ var VOW = (function () {
 // will deliver a possibly sparse array of results of any kept promises.
 // The result will contain an undefined element for each broken promise.
 
-            var remaining = array.length, results = [], vow = VOW.make();
+            var remaining = array.length;
+            var results = [];
+            var vow = VOW.make();
 
             function check() {
                 remaining -= 1;
