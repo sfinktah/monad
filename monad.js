@@ -115,6 +115,16 @@ function MONAD(modifier) {
         };
         return unit;
     };
+    unit.lift_novalue = function (name, func) {
+
+// Add a method to the prototype that calls bind with the func,
+// ignoring the return value and returning the existing monad.
+        
+        prototype[name] = function () {
+            return this.bind(func, arguments), this.bind(unit);
+        };
+        return unit;
+    };
     return unit;
 }
 
